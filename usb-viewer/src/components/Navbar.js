@@ -12,7 +12,6 @@ function Navigation() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto" onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}>
             <Nav.Link eventKey="Switch View">Swtich View</Nav.Link>
-            <Nav.Link eventKey="Refresh Devices">Refresh Devices</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

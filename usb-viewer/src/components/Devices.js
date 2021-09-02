@@ -1,36 +1,57 @@
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-
+import axios from "axios";
+import { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Row";
+import Accordion from "react-bootstrap/Accordion";
 
 function Devices() {
+  const [devices, setDevices] = useState([]);
+  const [listening, setListening] = useState(false);
 
-    const devices = [{
-            locationId: 0,
-            vendorId: 0,
-            productId: 0,
-            deviceName: 'USB Root Hub',
-            manufacturer: '(Standard USB Host Controller)',
-            serialNumber: '',
-            deviceAddress: 2
-        },
-        {
-            locationId: 0,
-            vendorId: 5824,
-            productId: 1155,
-            deviceName: 'Teensy USB Serial (COM3)',
-            manufacturer: 'PJRC.COM, LLC.',
-            serialNumber: '',
-            deviceAddress: 11
-        }
-    ]
+  useEffect(() => {
+    axios
+      .get("http://localhost:1337/getDevices")
+      .then((res) => {
+        setDevices(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
+    if (!listening) {
+      const events = new EventSource("http://localhost:1337/events");
 
-    return (
-        <>
-            {devices.map((device) => (<h3>{device.deviceName}</h3>))}
-        </>
-    );
+      events.onmessage = (event) => {
+        console.log(event);
+        const parsedData = JSON.parse(event.data);
+        setDevices(parsedData);
+      };
+      setListening(true);
+    }
+  }, [listening, devices]);
+
+  return (
+    <Container>
+      <Row>
+        <Col>
+          {devices.map((device) => (
+            <Accordion>
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>{device.deviceName}</Accordion.Header>
+                <Accordion.Body>
+                  <p><strong>Product ID: </strong> {device.deviceDescriptor.idProduct}</p>
+                  <p><strong>Vendor ID: </strong>{device.deviceDescriptor.idVendor}</p>
+                  <p><strong>Manufacturer: </strong>{device.manufacturer}</p>
+
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          ))}
+        </Col>
+      </Row>
+    </Container>
+  );
 }
 
 export default Devices;
