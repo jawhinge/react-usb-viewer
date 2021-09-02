@@ -1,0 +1,17 @@
+{
+  "name": "usb-viewer-server",
+  "version": "1.0.0",
+  "description": "Fetches USB devices in real time",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Georgi Durankiev",
+  "license": "ISC",
+  "dependencies": {
+    "drivelist": "^9.2.4",
+    "systeminformation": "^5.8.7",
+    "usb": "^1.7.2",
+    "usb-detection": "^4.10.0"
+  }
+}
