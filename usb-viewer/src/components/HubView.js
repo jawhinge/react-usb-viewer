@@ -9,8 +9,7 @@ function HubView(props) {
             <Accordion defaultActiveKey="0">
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
-                  {device.deviceName} - At Port {device.portNumbers}, Bus
-                  {device.busNumber}
+                  {device.deviceName} - At Port {device.portNumbers}, Bus {device.busNumber}
                 </Accordion.Header>
                 <Accordion.Body>
                   <p>
@@ -71,8 +70,7 @@ function HubView(props) {
             <Accordion defaultActiveKey="0">
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
-                  {device.deviceName} - At Port {device.portNumbers}, Bus{" "}
-                  {device.busNumber}
+                  {device.deviceName} - At Port {device.portNumbers}, Bus {device.busNumber}
                 </Accordion.Header>
                 <Accordion.Body>
                   <p>
