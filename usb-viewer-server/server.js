@@ -72,6 +72,20 @@ usbDetect.on("change", () => {
   updateDevices();
 });
 
+function processHubs(devices){
+  devices.forEach(device => {
+    if (device.isHub) {
+      device.children = [];
+      devices.forEach(child =>{
+        if(child.isChild && child.busNumber === device.busNumber && child.portNumbers[0] === device.portNumbers[0]){
+          device.children.push(child)
+        }
+      });
+    }
+  });
+  return(devices);
+}
+
 async function updateDevices(callback) {
   await holUp(1);
   currentlyConnected = [];
@@ -84,15 +98,24 @@ async function updateDevices(callback) {
       device.deviceName = usbDetectInfo[0].deviceName;
       device.manufacturer = usbDetectInfo[0].manufacturer;
       device.serialNumber = usbDetectInfo[0].serialNumber;
+      if (device.portNumbers.length > 1) {
+        device.isChild = true;
+      }else{
+        device.isChild = false
+      }
+      if (device.deviceName.toLowerCase().includes('hub')) {
+        device.isHub = true;
+      }else{
+        device.isHub = false;
+      }
       currentlyConnected.push(device);
     }
   }
+  currentlyConnected = processHubs(currentlyConnected);
   return sendEventsToAll(currentlyConnected);
 }
 
-updateDevices(function (devices) {
-  console.log("Initial update...");
-});
+updateDevices(function (devices){});
 
 app.listen(port, () => {
   console.log(`USB Viewer Server listening at http://localhost:${port}`);

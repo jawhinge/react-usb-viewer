@@ -1,13 +1,17 @@
 import './App.css';
-import Navigation from './components/Navbar'
-import Devices from './components/Devices'
+import Navigation from './components/Navigation';
+import Devices from './components/Devices';
+import { useState } from "react";
 
 
 function App() {
+
+  const [viewType, setviewType] = useState("hub"); 
+
   return (
     <>
-      <Navigation/>
-      <Devices/>
+      <Navigation onChangeView={(newView)=>{setviewType(newView)}}/>
+      <Devices viewType = {viewType}/>
     </>
   );
 }
